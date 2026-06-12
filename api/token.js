@@ -1,6 +1,29 @@
 export default async function handler(req, res) {
+  // Allow only POST
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
-    const { code, code_verifier, client_id, redirect_uri } = req.body;
+    // SAFE parsing (fixes your error)
+    const body =
+      typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body || {};
+
+    const {
+      code,
+      code_verifier,
+      client_id,
+      redirect_uri
+    } = body;
+
+    if (!code || !code_verifier) {
+      return res.status(400).json({
+        error: "Missing required fields",
+        received: body
+      });
+    }
 
     const response = await fetch("https://oauth.deriv.com/oauth2/token", {
       method: "POST",
