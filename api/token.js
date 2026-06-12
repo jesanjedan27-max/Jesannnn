@@ -1,26 +1,21 @@
 export default async function handler(req, res) {
-  // Allow only POST
+  // Allow POST only
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    // SAFE parsing (fixes your error)
+    // Vercel sometimes does NOT auto-parse body
     const body =
       typeof req.body === "string"
         ? JSON.parse(req.body)
-        : req.body || {};
+        : req.body;
 
-    const {
-      code,
-      code_verifier,
-      client_id,
-      redirect_uri
-    } = body;
+    const { code, code_verifier, client_id, redirect_uri } = body || {};
 
-    if (!code || !code_verifier) {
+    if (!code || !code_verifier || !client_id || !redirect_uri) {
       return res.status(400).json({
-        error: "Missing required fields",
+        error: "Missing OAuth parameters",
         received: body
       });
     }
