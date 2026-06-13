@@ -29,20 +29,22 @@ export default async function handler(req, res) {
       });
     }
 
+    const body = new URLSearchParams({
+      grant_type: "authorization_code",
+      code,
+      code_verifier,
+      client_id,
+      redirect_uri
+    });
+
     const response = await fetch(
       "https://oauth.deriv.com/oauth2/token",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: JSON.stringify({
-          grant_type: "authorization_code",
-          code,
-          code_verifier,
-          client_id,
-          redirect_uri
-        })
+        body: body.toString()
       }
     );
 
@@ -60,4 +62,4 @@ export default async function handler(req, res) {
     });
 
   }
-      }
+  }
