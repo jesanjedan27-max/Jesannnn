@@ -23,15 +23,6 @@ export default async function handler(req, res) {
       redirect_uri
     } = req.body || {};
 
-    return res.status(200).json({
-      received: {
-        code: !!code,
-        code_verifier: !!code_verifier,
-        client_id,
-        redirect_uri
-      }
-    });
-
     const body = new URLSearchParams({
       grant_type: "authorization_code",
       code,
@@ -51,11 +42,12 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const text = await response.text();
 
-    return res
-      .status(response.ok ? 200 : 400)
-      .json(data);
+    return res.status(response.ok ? 200 : 400).json({
+      status: response.status,
+      response: text
+    });
 
   } catch (err) {
 
@@ -65,4 +57,4 @@ export default async function handler(req, res) {
     });
 
   }
-      }
+                }
