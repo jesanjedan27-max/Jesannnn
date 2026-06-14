@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     });
 
     const response = await fetch(
-      "https://oauth.deriv.com/oauth2/token",
+      "https://auth.deriv.com/oauth2/token",
       {
         method: "POST",
         headers: {
@@ -57,4 +57,4 @@ export default async function handler(req, res) {
     });
 
   }
-                }
+}
