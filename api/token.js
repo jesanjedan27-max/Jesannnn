@@ -23,6 +23,12 @@ export default async function handler(req, res) {
       redirect_uri
     } = req.body || {};
 
+    if (!code || !code_verifier || !client_id || !redirect_uri) {
+      return res.status(400).json({
+        error: "Missing OAuth params"
+      });
+    }
+
     const body = new URLSearchParams({
       grant_type: "authorization_code",
       code,
@@ -42,12 +48,11 @@ export default async function handler(req, res) {
       }
     );
 
-    const text = await response.text();
+    const data = await response.json();
 
-    return res.status(response.ok ? 200 : 400).json({
-      status: response.status,
-      response: text
-    });
+    return res
+      .status(response.ok ? 200 : 400)
+      .json(data);
 
   } catch (err) {
 
