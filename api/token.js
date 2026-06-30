@@ -12,9 +12,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { code, code_verifier, client_id, redirect_uri } = req.body || {};
+    const { code, code_verifier } = req.body || {};
 
-    if (!code || !code_verifier || !client_id || !redirect_uri) {
+    if (!code || !code_verifier) {
       return res.status(400).json({ error: "Missing OAuth params" });
     }
 
@@ -27,8 +27,8 @@ export default async function handler(req, res) {
         grant_type: "authorization_code",
         code,
         code_verifier,
-        client_id,
-        redirect_uri
+        client_id: "33wZZKTFZrmsZgFaAH53Z",
+        redirect_uri: "https://jesanjedan27-max.github.io/tradingbot/"
       })
     });
 
